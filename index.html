@@ -33,7 +33,7 @@
 
             /* initialize global variables */
             var dataset,
-                numPoints = 20,
+                numPoints = 15,
                 width = 500,
                 height = 300,
                 padding = 60,
@@ -48,7 +48,7 @@
                 for(var i = 0; i < numPoints; i++) {
                     var subset = [];
                     for(var k = 0; k < 2; k++) {
-                        var val = Math.round(Math.random() * 1000 + 1);
+                        var val = Math.round(Math.random() * 1000);
                         subset.push(val);
                     }
                     dataset.push(subset);
@@ -119,6 +119,10 @@
                 //generate new data set
                 newData();
 
+                //Update scales
+                yScale.domain([0, d3.max(dataset, function(d){ return d[1]; })]);
+                xScale.domain([0, d3.max(dataset, function(d){ return d[0]; })]);
+
                 //Update circle positions
                 circle.data(dataset)
                     .transition()
@@ -141,13 +145,13 @@
                 //Update x-axis
                 svg.select(".x.axis")
                     .transition()
-                    .duration(1000)
+                    .duration(duration)
                     .call(xAxis);
 
                 //Update y-axis
                 svg.select(".y.axis")
                     .transition()
-                    .duration(1000)
+                    .duration(duration)
                     .call(yAxis);
             });
 
