@@ -70,6 +70,15 @@
             var svg = d3.select("body").append("svg")
                           .attr("width", width)
                           .attr("height", height);
+            svg.append("clipPath")
+                .attr("id", "chart-area")
+              .append("rect")
+                .attr({
+                    "x" : padding,
+                    "y" : 0,
+                    "width" : width - padding,
+                    "height" : height - padding
+                });
 
             var circle = svg.selectAll("circle").data(dataset)
                 .enter()
@@ -77,7 +86,8 @@
                 .attr({
                     "cx" : function(d){ return xScale(d[0]); },
                     "cy" : function(d){ return yScale(d[1]); },
-                    "r" : radius
+                    "r" : radius,
+                    "clip-path" : "url(#chart-area)"
                 });
 
             var text = svg.selectAll("text").data(dataset)
