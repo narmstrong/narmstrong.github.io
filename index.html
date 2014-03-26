@@ -33,7 +33,7 @@
 
             /* initialize global variables */
             var dataset,
-                numPoints = 15,
+                numPoints = 15    ,
                 width = 500,
                 height = 300,
                 padding = 60,
@@ -127,9 +127,18 @@
                 circle.data(dataset)
                     .transition()
                     .duration(duration)
+                    .each("start", function(){
+                        d3.select(this).attr("r", 2);
+                    })
                     .attr({
                         "cx" : function(d){ return xScale(d[0]); },
                         "cy" : function(d){ return yScale(d[1]); }
+                    })
+                    .each("end", function(){
+                        d3.select(this)
+                            .transition()
+                            .duration(250)
+                            .attr("r", radius);
                     });
 
                 //Update coordinate text
