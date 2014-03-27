@@ -2,176 +2,100 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>D3 Test #6</title>
+        <title>D3 GeoJSON Test #1</title>
         <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-        <style type="text/css">
-            circle {
+        <!-- <style type="text/css">
+
+            svg path {
                 fill : steelblue;
             }
-            circle:hover {
+
+            svg path:hover {
                 fill : brown;
             }
-            button {
-                display : block;
-            }
-            .axis path,
-            .axis line {
-                fill: none;
-                stroke: black;
-                shape-rendering: crispEdges;
-            }
-            .axis text {
-                font-family: sans-serif;
-                font-size: 11px;
-            }
 
-        </style>
+        </style> -->
     </head>
     <body>
-        <button>new data</button>
         <script type="text/javascript">
 
-            /* initialize global variables */
-            var dataset,
-                numPoints = 15    ,
-                width = 500,
-                height = 300,
-                padding = 60,
-                paddingR = 100,
-                radius = 3,
-                duration = 500,
-                ticks = 5;
+            // Initialize global variables
+            var svg_height = 300,
+                svg_width = 500;
 
-            /* generate new data */
-            var newData = function(){
-                dataset = [];
-                for(var i = 0; i < numPoints; i++) {
-                    var subset = [];
-                    for(var k = 0; k < 2; k++) {
-                        var val = Math.round(Math.random() * 1000);
-                        subset.push(val);
+            // Initialize map projection for use by the path generator
+
+            var projection = d3.geo.albersUsa()
+                                     .translate([svg_width/2, svg_height/2]) // centers projection in SVG
+                                     .scale([615]);
+
+            // Initialize path generator for map construction
+            var path = d3.geo.path()
+                               .projection(projection);
+
+            // Initialize color scale
+            var color = d3.scale.quantize()
+                                  .range(["rgb(237,248,233)",
+                                          "rgb(186,228,179)",
+                                          "rgb(116,196,118)",
+                                          "rgb(49,163,84)",
+                                          "rgb(0,109,44)"
+                                         ]);
+
+            // Initialize SVG environment
+            var svg = d3.select("body")
+                        .append("svg")
+                          .attr({
+                              "width" : svg_width,
+                              "height" : svg_height
+                          });
+
+            // Load agricultural productivity data
+            d3.csv("us-ag-productivity-2004.csv", function(data) {
+
+                // Set color domain based on ag data
+                color.domain([
+                    d3.min(data, function(d){ return d.value; }),
+                    d3.max(data, function(d){ return d.value; })
+                ]);
+
+                // Load GeoJSON polygon path data
+                d3.json("us-states.json", function(json){
+
+                    // Add ag data to GeoJSON data
+                    for(var i = 0; i < data.length; i++) {
+                        var stateName = data[i].state;
+                        var dataVal = parseFloat(data[i].value);
+
+                        for(var j = 0; j < json.features.length; j++) {
+                            if(stateName == json.features[j].properties.name) {
+                                json.features[j].properties.value = dataVal;
+                                break;
+                            }
+                        }
                     }
-                    dataset.push(subset);
-                }
-            };
 
-            newData();
+                    // Define json dependent actions to execute in the callback
+                    svg.selectAll("path")
+                           .data(json.features)
+                           .enter()
+                         .append("path")
+                           .attr("d", path)
+                           .style("fill", function(d){
+                               if(d.properties.value)
+                                   return color(d.properties.value);
+                               else
+                                   return "#ccc";
+                           }) /*
+                           .on("mouseover", function() {
+                               d3.select(this)
+                                   .attr("transform", "scale(1.05)");
+                           }) */;
 
-            /* initialize scaling functions */
-            var xScale = d3.scale.linear()
-                           .domain([0, d3.max(dataset, function(d){ return d[0]; })])
-                           .range([padding, width - paddingR]);
+                    // Print generated polygons to the console
+                    console.log(d3.selectAll("path"));
 
-            var yScale = d3.scale.linear()
-                           .domain([0, d3.max(dataset, function(d){ return d[1]; })])
-                           .range([height - padding, padding]); /* inverted to orient high values to top */
-
-            /* create svg elements for initial dataset */
-            var svg = d3.select("body").append("svg")
-                          .attr("width", width)
-                          .attr("height", height);
-            svg.append("clipPath")
-                .attr("id", "chart-area")
-              .append("rect")
-                .attr({
-                    "x" : padding,
-                    "y" : 0,
-                    "width" : width - padding,
-                    "height" : height - padding
                 });
-
-            var circle = svg.selectAll("circle").data(dataset)
-                .enter()
-              .append("circle")
-                .attr({
-                    "cx" : function(d){ return xScale(d[0]); },
-                    "cy" : function(d){ return yScale(d[1]); },
-                    "r" : radius,
-                    "clip-path" : "url(#chart-area)"
-                });
-
-            var text = svg.selectAll("text").data(dataset)
-                .enter()
-              .append("text")
-                .text(function(d){ return "(" + d[0] + ", " + d[1] + ")"})
-                .attr({
-                    "text-anchor" : "left",
-                    "font-family" : "sans-serif",
-                    "font-size" : "10px",
-                    "fill" : "#ccc",
-                    "x" : function(d){ return xScale(d[0]) + 5;},
-                    "y" : function(d){ return yScale(d[1]) - 3;}
-                });
-
-            var xAxis = d3.svg.axis()
-                              .scale(xScale)
-                              .orient("bottom")
-                              .ticks(ticks);
-
-            var yAxis = d3.svg.axis()
-                              .scale(yScale)
-                              .orient("left")
-                              .ticks(ticks);
-
-            svg.append("g").attr("class", "x axis")
-                           .attr("transform", "translate(0," + (height - padding) + ")") /* push axis to bottom */
-                           .call(xAxis);
-
-            svg.append("g").attr("class", "y axis")
-                           .attr("transform", "translate(" + padding + ",0)") /* push axis to left */
-                           .call(yAxis);
-
-            /* log initial parameters to console */
-            console.log(dataset);
-
-            /* generate new data on button click */
-            d3.select("button").on("click", function(){
-                //generate new data set
-                newData();
-
-                //Update scales
-                yScale.domain([0, d3.max(dataset, function(d){ return d[1]; })]);
-                xScale.domain([0, d3.max(dataset, function(d){ return d[0]; })]);
-
-                //Update circle positions
-                circle.data(dataset)
-                    .transition()
-                    .duration(duration)
-                    .each("start", function(){
-                        d3.select(this).attr("r", 2);
-                    })
-                    .attr({
-                        "cx" : function(d){ return xScale(d[0]); },
-                        "cy" : function(d){ return yScale(d[1]); }
-                    })
-                    .each("end", function(){
-                        d3.select(this)
-                            .transition()
-                            .duration(250)
-                            .attr("r", radius);
-                    });
-
-                //Update coordinate text
-                text.data(dataset)
-                    .transition()
-                    .duration(duration)
-                    .text(function(d){ return "(" + d[0] + ", " + d[1] + ")"})
-                    .attr({
-                        "x" : function(d){ return xScale(d[0]) + 5;},
-                        "y" : function(d){ return yScale(d[1]) - 3;}
-                    });
-
-                //Update x-axis
-                svg.select(".x.axis")
-                    .transition()
-                    .duration(duration)
-                    .call(xAxis);
-
-                //Update y-axis
-                svg.select(".y.axis")
-                    .transition()
-                    .duration(duration)
-                    .call(yAxis);
             });
 
         </script>
