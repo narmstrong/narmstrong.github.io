@@ -1,160 +1,225 @@
+@charset "UTF-8";
+/**
+ *  Theme Name:     bt1
+ *  Theme URL:      http://narmstrong.github.io/css/main.css
+ *  Description:    narmstrong.github.io Jekyll Theme
+ *  Version:        0.1
+ *  Author:         Nick Armstrong
+ *  Author URI:     http://narmstrong.github.io
+ *  Tags:           monochrome, simple, typographic, html5
+ */
+
+
 /*****************************************************************************/
-/*
-/* Common
-/*
+/* Resets
 /*****************************************************************************/
 
 /* Global Reset */
 * {
-  margin: 0;
-  padding: 0;
+  vertical-align : baseline;
+  font-size : 100%;
+  outline : 0;
+  border : 0;
+  margin : 0;
+  padding : 0;
 }
 
-html, body { height: 100%; }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+/*****************************************************************************/
+/* Fonts
+/*****************************************************************************/
+
+@font-face {
+font-family: Kepler;
+font-weight: normal;
+src: url("../fonts/KeplerStd-LightSubh.otf") format("opentype");
+}
+
+@font-face {
+font-family: KeplerBold;
+font-weight: bold;
+src: url("../fonts/KeplerStd-Capt.otf") format("opentype");
+}
+
+@font-face {
+font-family: KeplerItalic;
+font-weight: italic;
+src: url("../fonts/KeplerStd-LightIt.otf") format("opentype");
+}
+
+/* General Tweeks */
+html,
+body {
+  height: 100%;
+}
 
 body {
-  background-color: #FFF;
-  font: 13.34px Helvetica, Arial, sans-serif;
-  font-size: small;
-  text-align: center;
+  background-color : #fcfcfa;
+  font-family : Kepler, sans-serif;
+  color : #444444;
+  font-style : normal;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-size: 100%; }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight : normal;
+}
 
-h1 { margin-bottom: 1em; }
-p { margin: 1em 0; }
+h1 {
+  margin-bottom: 1em;
+}
 
-a         { color: #00a; }
-a:hover   { color: #000; }
-a:visited { color: #a0a; }
+p {
+  margin: 1em 0;
+  line-height : 140%
+}
+
+a {
+  color : steelblue;
+  text-decoration : none;
+}
+
+a:hover {
+  text-decoration : underline;
+}
+
+a:focus {
+  outline: thin dotted;
+}
+
+a:visited {
+  color : color: #777;
+}
+
+i,
+em {
+  font-family : KeplerItalic;
+}
+
+b,
+strong {
+  font-style : KeplerBold;
+}
+
+code {
+  color: #aaa;
+  font-family: Monaco, "Courier New", monospace;
+  font-size: 0.8em;
+}
+
 
 /*****************************************************************************/
-/*
-/* Home
-/*
+/* Site Wrapper
 /*****************************************************************************/
-.posts {
+
+.site {
+  text-align: justify;
+  width: 50%;
+  margin: 3em auto 2em;
+}
+
+
+/*****************************************************************************/
+/* Header
+/*****************************************************************************/
+
+header{
+  text-align : center;
+  margin : 0em auto 2em;
+}
+
+header a,
+header a:hover,
+header a:visited {
+  color : #444444;
+  text-decoration : none;
+  font-size : 1.7em;
+}
+
+
+/*****************************************************************************/
+/* Index
+/*****************************************************************************/
+
+.posts_list {
   list-style-type: none;
   margin-bottom: 2em;
 }
 
-.posts li {
-  line-height: 1.75em;
+.posts_list span{
+  display : block;
 }
 
-.posts span {
-  color: #aaa;
-  font-family: Monaco, "Courier New", monospace;
-  font-size: 80%;
+.posts_list li {
+  margin: 1em auto 4em;
 }
+
 
 /*****************************************************************************/
-/*
-/* Site
-/*
-/*****************************************************************************/
-
-.site {
-  font-size: 115%;
-  text-align: justify;
-  width: 42em;
-  margin: 3em auto 2em;
-  line-height: 1.5em;
-}
-
-.header a {
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.title {
-  display: inline-block;
-  margin-bottom: 2em;
-}
-
-.title a {
-  color: #a00;
-}
-
-.title a:hover {
-  color: #000;
-}
-
-.header a.extra {
-  color: #aaa;
-  margin-left: 1em;
-}
-
-.header a.extra:hover {
-  color: #000;
-}
-
-.meta {
-  color: #aaa;
-}
-
-.footer {
-  font-size: 80%;
-  color: #666;
-  border-top: 4px solid #eee;
-  margin-top: 2em;
-  overflow: hidden;
-}
-
-.footer .contact {
-  float: left;
-  margin-right: 3em;
-}
-
-.footer .contact a {
-  color: #8085C1;
-}
-
-.footer .rss {
-  margin-top: 1.1em;
-  margin-right: -.2em;
-  float: right;
-}
-
-.footer .rss img {
-  border: 0;
-}
-
-/*****************************************************************************/
-/*
 /* Posts
-/*
 /*****************************************************************************/
 
-/* standard */
-.post pre {
-  border: 1px solid #ddd;
-  background-color: #eef;
-  padding: 0 .4em;
+.post {
+  font-size: 1.41em;
+  line-height: 1.5em;
+  margin: 0 auto;
+  word-break: hyphenate;
 }
 
-.post ul, .post ol {
-  margin-left: 1.35em;
+.post.title,
+.post.author{
+  text-align : center;
 }
 
-.post code {
-  border: 1px solid #ddd;
-  background-color: #eef;
-  padding: 0 .2em;
+.post.date {
+  border-bottom : 1px solid #c3c3c3;
+  margin-bottom : 2em;
 }
 
-.post pre code {
-  border: none;
+.post.title a {
+  color : #444444;
+  text-decoration : none;
+  font-size : 1.8em;
 }
 
-/* terminal */
-.post pre.terminal {
-  border: 1px solid #000;
-  background-color: #333;
-  color: #FFF;
+.post.title {
+  margin-bottom: 0.6em;
+  line-height : 1em;
+  font-size : 1.8em;
 }
 
-.post pre.terminal code {
-  background-color: #333;
+.post.author {
+  font-variant : small-caps;
+  font-size: 1.175em;
+  margin : 0 auto 2.4em;
+}
+
+article span,
+article p,
+article img,
+article svg {
+  display : block;
+}
+
+article img,
+article svg {
+  margin 0 auto;
 }
