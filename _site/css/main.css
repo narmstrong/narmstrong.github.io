@@ -85,6 +85,7 @@ h6 {
 
 h1 {
   margin-bottom: 1em;
+  font-size : 1.6em;
 }
 
 p {
@@ -221,5 +222,15 @@ article svg {
 
 article img,
 article svg {
-  margin 0 auto;
+  margin : 1.41em auto;
+}
+
+article h2,
+.post.preview h2
+{
+  text-align : center;
+  font-style : italic;
+  margin-top : 2.5em;
+  font-weight : bold;
+  font-size : 1em;
 }
