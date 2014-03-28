@@ -234,3 +234,18 @@ article h2,
   font-weight : bold;
   font-size : 1em;
 }
+
+
+/*****************************************************************************/
+/* Footer
+/*****************************************************************************/
+
+footer a{
+  text-align : center;
+  display : block;
+}
+
+footer {
+  padding-top : 3em;
+  padding-bottom : 3em;
+}
