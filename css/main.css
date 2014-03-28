@@ -221,5 +221,11 @@ article svg {
 
 article img,
 article svg {
-  margin 0 auto;
+  margin : 1.41em auto;
+}
+
+article h2 {
+  text-align : center;
+  font-style : italic;
+  margin-top : 2.5em;
 }

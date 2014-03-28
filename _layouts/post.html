@@ -5,5 +5,5 @@ layout: default
 <article>
     <h1 class="post title"><a href="{{ post.url }}">{{ page.title }}</a></h1>
     <span class="post author">by nick armstrong</span>
-    <section class="post">{{ page.content }}</section>
+    <section class="post">{{ page.content | markdownify }}</section>
 </article>
